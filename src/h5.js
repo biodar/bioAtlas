@@ -5,7 +5,7 @@ const h5GetData = (url, file, callback) => {
   if (!isString(file) || !isString(url)) return null;
 
   console.log('fetching...')
-  fetch(url + file)
+  fetch(url)
     .then(function (response) {
       // console.log(response)
       return response.arrayBuffer()
@@ -29,14 +29,14 @@ const h5GetData = (url, file, callback) => {
     });
 }
 const valuesToLonLat = (options) => {
-  const { values, rlon, rlat } = options;
+  const { values, rlon, rlat, range = 50 } = options;
   const lonlats = [];
   if (!isArray(values) || !isNumber(+rlon) ||
     !isNumber(rlat)) {
     return null
   }
   for (let t = 0; t < 360; t++) {
-    for (let r = 0; r < 425; r++) {
+    for (let r = 0; r < range; r++) {
       // for each theta radar goes 425 ranges
       if (values[r * t] === 0) continue; // or undefined?
       // values[a*r] 
