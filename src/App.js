@@ -5,7 +5,7 @@ import './App.css';
 import { h5GetData, valuesToLonLat } from './h5';
 
 const turf = window.turf;
-const url = "https://raw.github.com/biodar/bdformats/master/202007170002_polar_pl_radar20b2_augzdr_lp.h5"
+const url = "https://raw.githubusercontent.com/biodar/bdformats/master/202007170002_polar_pl_radar20b2_augzdr_lp.h5"
 const file = "202007170002_polar_pl_radar20b2_augzdr_lp.h5"
 function App() {
   const [geojson, setGeojson] = useState({})

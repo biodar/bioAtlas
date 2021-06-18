@@ -2,9 +2,10 @@ import { isArray, isNumber, isString } from "./JSUtils";
 const hdf5 = window.hdf5;
 
 const h5GetData = (url, file, callback) => {
-  if (!isString(file) || !isString(url)) return null;
+  if (!isString(file) || !isString(url)
+    || !url || !file) return null;
 
-  console.log('fetching...')
+  // console.log('fetching...')
   fetch(url)
     .then(function (response) {
       // console.log(response)
@@ -28,6 +29,17 @@ const h5GetData = (url, file, callback) => {
       // let a = d.attrs;
     });
 }
+/**
+ * Function to translate radar values to xyz points in geographic space.
+ * More documentation will be written on the method fod going it. 
+ * 
+ * Currently the code is written as JS version fo the R code
+ * written by Dr Chris Hassall here:
+ * https://github.com/biodar/bdformats/blob/master/Reading%20HDF5%20in%20R.R
+ * 
+ * @param {Object} options 
+ * @returns 
+ */
 const valuesToLonLat = (options) => {
   const { values, rlon, rlat, range = 50 } = options;
   const lonlats = [];
