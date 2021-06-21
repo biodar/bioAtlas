@@ -15,11 +15,15 @@ const h5GetData = (url, file, callback) => {
       var f = new hdf5.File(buffer, file);
       const data = f.get('dataset1/data1/data').value;
       const where = f.get('where').attrs;
+      const what = f.get('dataset1/data1/what').attrs;
       // TODO [...new Set(items)]
       const elangles = f.get('dataset1/how/elangles').value;
       // console.log('data: ', data);
       typeof callback === 'function' &&
-        callback({ data , where, elangles});
+        callback({ data: data.filter(e => e !== 0), 
+          where, what, elangles});
+      // data.slice(0, 500).map( e => console.log(e >= 618))
+      // console.log('what: ', what)
       // console.log('data10: ', f.get('dataset1/data10'))
       // console.log('where: ', f.get('where'))
       // do something with f;
@@ -50,7 +54,6 @@ const valuesToLonLat = (options) => {
   for (let t = 0; t < 360; t++) {
     for (let r = 0; r < range; r++) {
       // for each theta radar goes 425 ranges
-      if (values[r * t] === 0) continue; // or undefined?
       // values[a*r] 
       lonlats.push([
         //delta / 111320 * cos (rlat)

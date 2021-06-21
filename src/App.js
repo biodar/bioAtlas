@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     h5GetData(url, file, (obj) => {
       // console.log(obj)
-      const { data, where } = obj;
+      const { data, where, what } = obj;
       // obj == {data: Array, where: Object, elangles: Array}
       // obj.where => 
       // height: 222
@@ -24,8 +24,10 @@ function App() {
         // values, rlon, rlat 
         values: data, rlon: where.lon, rlat: where.lat
       })
+      const gain = +what.gain, offset = +what.offset;
       const gj = turf.featureCollection(
-        radarLonLats.map((e, i) => turf.point(e, { value: data[i] }))
+        radarLonLats.map((e, i) => turf.point(e, 
+          { value: +(((data[i] * gain) + offset).toFixed(4)) }))
       )
       if (Object.keys(geojson).length === 0) {
         setGeojson(gj)
