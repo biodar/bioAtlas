@@ -13,6 +13,8 @@ function App() {
     h5GetData(url, file, (obj) => {
       // console.log(obj)
       const { data, where, what } = obj;
+      const gain = +what.gain, offset = +what.offset;
+      const dbz = data.map(e => +((e * gain) + offset).toFixed(4))
       // obj == {data: Array, where: Object, elangles: Array}
       // obj.where => 
       // height: 222
@@ -22,12 +24,10 @@ function App() {
       // source_local_grid_northing: 1583
       const radarLonLats = valuesToLonLat({
         // values, rlon, rlat 
-        values: data, rlon: where.lon, rlat: where.lat
+        values: dbz, rlon: where.lon, rlat: where.lat
       })
-      const gain = +what.gain, offset = +what.offset;
       const gj = turf.featureCollection(
-        radarLonLats.map((e, i) => turf.point(e, 
-          { value: +(((data[i] * gain) + offset).toFixed(4)) }))
+        radarLonLats.map((e, i) => turf.point(e, { value: dbz[i] }))
       )
       if (Object.keys(geojson).length === 0) {
         setGeojson(gj)
@@ -40,7 +40,7 @@ function App() {
   // console.log(geojson)
   return (
     Object.keys(geojson).length !== 0
-    && <Eatlas data={geojson} column={"value"}/>
+    && <Eatlas data={geojson} column="value"/>
   );
 }
 

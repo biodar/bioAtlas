@@ -55,19 +55,50 @@ const valuesToLonLat = (options) => {
     for (let r = 0; r < range; r++) {
       // for each theta radar goes 425 ranges
       // values[a*r] 
+      if(values[t*r] < 0) continue
       lonlats.push([
         //delta / 111320 * cos (rlat)
         rlon + ((r * Math.sin(t)) / 110540),
-        rlat + ((r * Math.cos(t)) / 111320 * Math.cos(rlat))
+        rlat + ((r * Math.cos(t)) / 111320 * Math.cos(rlat)),
         // TODO 
         // z
+        beamHeight({range, elevation: 1, lat: rlat})
       ])
     }
   }
   return lonlats;
 }
 
+const beamHeight = (options) => {
+  const {range, elevation, k = 4/3, lat, re = 6378, rp = 6357} = options;
+  if(!isNumber(range) || !isNumber(k) || !isNumber(elevation) || !isNumber(lat)
+  || !isNumber(re) || !isNumber(rp)) return null;
+  
+  //from https://github.com/adokter/bioRad/blob/master/R/beam.R
+  const earthRadius = (a, b, lat) => {
+    lat = lat * Math.PI / 180
+    const r = +(1000 * Math.sqrt(
+      ((a**2 * Math.cos(lat))**2 + (b**2 * Math.sin(lat))**2) /
+        ((a * Math.cos(lat))**2 + (b * Math.sin(lat))**2)
+    )).toFixed(2)
+    return r;
+  }
+
+  // sqrt(
+  //   range^2 + (k * earth_radius(re, rp, lat))^2 +
+  //     2 * range * (k * earth_radius(re, rp, lat)) * sin(elev * pi / 180)
+  // ) - k * earth_radius(re, rp, lat)
+  const er = earthRadius(re, rp, lat);
+  const bh = Math.sqrt(
+    range ** 2 + (k * er) ** 2 +
+    2 * range * (k * er) * Math.sin(elevation * Math.PI / 180)
+  ) - k * er;
+
+  return +bh.toFixed(2)
+}
+
 export {
   valuesToLonLat,
+  beamHeight,
   h5GetData
 }
