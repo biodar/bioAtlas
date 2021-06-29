@@ -44,9 +44,11 @@ const h5GetData = (url, file, callback) => {
  * @param {Object} options 
  * @returns 
  */
-const valuesToLonLat = (options) => {
-  const { values, rlon, rlat, range = 50 } = options;
-  const lonlats = [];
+const valuesToLonLatAltdBZ = (options) => {
+  // See Maryna's email range up to 50km
+  // that is 50000/600 ~ 80 out of the 425 ranges
+  const { values, rlon, rlat, range = 80, elangle = 1 } = options;
+  const xyzs = [];
   if (!isArray(values) || !isNumber(+rlon) ||
     !isNumber(rlat)) {
     return null
@@ -55,18 +57,23 @@ const valuesToLonLat = (options) => {
     for (let r = 0; r < range; r++) {
       // for each theta radar goes 425 ranges
       // values[a*r] 
-      if(values[t*r] < 0) continue
-      lonlats.push([
+      // see https://www.weather.gov/media/lmk/soo/Dual_Pol_Overview.pdf
+      if(values[t*r] > 2 || values[t*r] < 0.25) continue
+      const rm = r * 600;
+      const ralt = beamHeight({range: rm, elevation: elangle, lat: rlat})
+      // console.log(ralt);
+      xyzs.push([
         //delta / 111320 * cos (rlat)
-        rlon + ((r * Math.sin(t)) / 110540),
-        rlat + ((r * Math.cos(t)) / 111320 * Math.cos(rlat)),
+        rlon + ((rm * Math.sin(t)) / 110540),
+        rlat + ((rm * Math.cos(t)) / 111320 * Math.cos(rlat)),
         // TODO 
         // z
-        beamHeight({range, elevation: 1, lat: rlat})
+        ralt,
+        values[t*r]
       ])
     }
   }
-  return lonlats;
+  return xyzs;
 }
 
 const beamHeight = (options) => {
@@ -98,7 +105,7 @@ const beamHeight = (options) => {
 }
 
 export {
-  valuesToLonLat,
+  valuesToLonLatAltdBZ as valuesToLonLatAlt,
   beamHeight,
   h5GetData
 }
