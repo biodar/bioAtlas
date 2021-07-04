@@ -10,5 +10,5 @@ So far, we have been able to translate each value in a ODIM format hdf5 `dataset
 In this eAtlas repo, the aim is getting [that R code](https://github.com/biodar/bdformats/blob/e77bee40fb6ebf5e76cd9c68691d0c67f3d110fa/Reading%20HDF5%20in%20R.R) into JS using [jsfive](https://github.com/usnistgov/jsfive).
 
 ## Note
-This is a template repository to use the Turing Geo-visualization Engine (TGVE or eAtlas) in a React app and deploying it in github pages.
+This is a template repository to use the Turing Geo-visualization Engine (TGVE or eAtlas) in a React app and deploying it in github pages. Most of the dev work is done using TGVE/npm branch locally and could be pushed here too.
 
