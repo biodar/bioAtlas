@@ -31,7 +31,6 @@ jobs:
           run: yarn run build
           env:
             CI: false
-            REACT_APP_DEFAULT_URL: https://raw.githubusercontent.com/layik/eatlas-data/main/casualties.csv 
             REACT_APP_MAPBOX_ACCESS_TOKEN: ${{secrets.MAPBOX_KEY}}
 
         - name: Run deploy script

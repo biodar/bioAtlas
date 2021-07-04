@@ -14,13 +14,14 @@ const files = [
   // "202007170004_polar_pl_radar20b0_augzdr_lp.h5",
   // "202007170003_polar_pl_radar20b1_augzdr_lp.h5",
   // "202007170002_polar_pl_radar20b2_augzdr_lp.h5",
-  "202007170002_polar_pl_radar20b3_augzdr_lp.h5",
-  "202007170002_polar_pl_radar20b4_augzdr_lp.h5"
+  // "202007170002_polar_pl_radar20b3_augzdr_lp.h5",
+  // "202007170002_polar_pl_radar20b4_augzdr_lp.h5"
+  "202007170002_polar_pl_radar20b2_augzdr_lp.h5"
 ]
 function App() {
   const [xyz, setXYZ] = useState([])
   useEffect(() => {
-    files.map(e => processH5("http://localhost:8080/" + e, e));
+    files.map(e => processH5("https://raw.githubusercontent.com/biodar/bdformats/master/" + e, e));
   }, [])
 
   // console.log(xyz);
