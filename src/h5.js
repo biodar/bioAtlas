@@ -47,7 +47,8 @@ const h5GetData = (url, file, callback) => {
 const valuesToLonLatAltdBZ = (options) => {
   // See Maryna's email range up to 50km
   // that is 50000/600 ~ 80 out of the 425 ranges
-  const { values, rlon, rlat, range = 80, elangle = 1 } = options;
+  const { values, rlon, rlat, range = 80, elangle = 1,
+  date } = options;
   const xyzs = [];
   if (!isArray(values) || !isNumber(+rlon) ||
     !isNumber(rlat)) {
@@ -68,8 +69,14 @@ const valuesToLonLatAltdBZ = (options) => {
         rlat + ((rm * Math.cos(t)) / 111320 * Math.cos(rlat)),
         // TODO 
         // z
-        ralt,
-        values[t*r]
+        +ralt.toFixed(0),
+        //zdr
+        values[t*r],
+        // convertRange(+values[t*r].toFixed(1), {
+        //   oldMin:0.25, oldMax: 2, newMin: 1, newMax: 10
+        // }),
+        //date
+        date
       ])
     }
   }

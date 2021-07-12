@@ -3,6 +3,9 @@ import Eatlas from 'eatlas';
 
 import './App.css';
 import { h5GetData, valuesToLonLatAlt } from './h5';
+import { isDate } from './JSUtils';
+
+// const files = require('./files.json');
 
 const turf = window.turf;
 const files = [
@@ -26,9 +29,14 @@ function App() {
 
   // console.log(xyz);
   // TODO: clearly not best for xyz
+  const getBio = (v) => v < 0.5 ? 1 : v < 1 ? 2 :
+  v < 1.5 ? 3 : 4
   const geojson = turf.featureCollection(
     
-    xyz.map(e => turf.point(e.slice(0,3), {value: e.slice(3)[0]}))
+    xyz.map(e => turf.point(e.slice(0,3), 
+    {alt: e.slice(2,3)[0], value: getBio(e.slice(3,4)[0]),
+      date: e.slice(4)[0]
+    }))
   )
   // console.log(geojson.features);
   return (
@@ -54,10 +62,16 @@ function App() {
       // lon: 0.60639
       // source_local_grid_easting: 5817
       // source_local_grid_northing: 1583
+      const d = file.substr(0, file.indexOf("_polar_pl"));
+      const dd = new Date(
+        d.slice(0,4), +d.slice(4,6) - 1, d.slice(6,8), d.slice(8,10),
+        d.slice(10)
+      )
       const radarLonLats = valuesToLonLatAlt({
         // values, rlon, rlat 
         values: dbz, rlon: where.lon, rlat: where.lat,
-        elangle: obj.elangles[0]
+        elangle: obj.elangles[0], 
+        date: isDate(dd) && dd.toLocaleString()
       });
       // const gj = turf.featureCollection(
       //   radarLonLats.map((e, i) => turf.point(e, { value: dbz[i] }))
