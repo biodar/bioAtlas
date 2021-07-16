@@ -29,13 +29,14 @@ RUN R -e 'install.packages(c("curl", "plumber", "data.table", "jsonlite"), repos
 # add node/npm
 RUN apt-get -y install curl gnupg
 RUN apt-get -y install nodejs npm
+RUN npm i -g yarn
 
 ADD . /app
 
 # build
 WORKDIR /app
-RUN npm install
-RUN npm run build
+RUN yarn
+RUN yarn run build
 RUN rm -rf node_modules
 
 EXPOSE 8000

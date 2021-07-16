@@ -1,0 +1,19 @@
+**/notes
+**/dist
+**/wip
+**/node_modules
+build
+npm-debug.log
+Dockerfile*
+docker-compose*
+.dockerignore
+.git
+.gitignore
+.env*
+README*
+LICENSE
+.vscode
+*.Rds
+*.geojson
+*.csv
+# ignore locks?
