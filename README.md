@@ -1,5 +1,10 @@
 # bioAtlas 
 
+## July 5th
+
+Meeting notes & 3D radar image. More later.
+
+
 ## June 24th
 
 We can now translate all azimuth and range values of the radar to xyz. The DeckGL pointcloudlayer and the scatterplotlayers can visualize the points. Attention now is on zdr values to detect insects. Then we can look at how we can detect their shapes from the radar beam heights. 
