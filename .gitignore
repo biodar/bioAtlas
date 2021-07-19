@@ -1,3 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.vscode/
+
 # Logs
 logs
 *.log
