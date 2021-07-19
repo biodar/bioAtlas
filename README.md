@@ -1,4 +1,9 @@
 # bioAtlas 
+[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+## July 5th
+
+Meeting notes & 3D radar image. More later.
+
 
 ## June 24th
 

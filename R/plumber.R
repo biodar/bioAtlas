@@ -36,7 +36,7 @@ dir.path = Sys.getenv("H5FILES_PATH")
 #' @get /api/files
 get_file_names = function(){
   if(!dir.exists(dir.path)){
-    return(list(message="No Files to return"))
+    return(list(message="No Files to return. Check files path."))
   }
   # we can then cater for CI here and elsewhere
   list.files(dir.path)
