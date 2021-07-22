@@ -2,7 +2,7 @@ version: '3'
 
 services:
   plumber:
-    image: layik/eatlas
+    image: bioatlas
     container_name: bioatlas
     restart: unless-stopped
     env_file: .env
