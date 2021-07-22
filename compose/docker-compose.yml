@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  plumber:
+  bioatlas:
     image: bioatlas
     container_name: bioatlas
     restart: unless-stopped
@@ -18,7 +18,7 @@ services:
     image: nginx:1.15.12-alpine
     container_name: webserver
     depends_on: 
-      - plumber
+      - bioatlas
     restart: unless-stopped
     ports:
       - "80:80"
