@@ -18,18 +18,14 @@ cors = function(res) {
   plumber::forward()
 }
 
-#' @section TODO:
-#' The plumber endpoint should not be there. Currently mapping React build to /
-#' at assets causes the swagger endpoint to be 404. Support is limited.
-#'
-#' @get /__swagger__/
-swagger = function(req, res){
-  fname = system.file("swagger-ui/index.html", package = "plumber") # serve the swagger page.
-  plumber::include_html(fname, res)
-}
-
 #' .h5 directory
 dir.path = Sys.getenv("H5FILES_PATH")
+if(!dir.exists(dir.path)){
+  # try the local path
+  # this is where we can dump & read .h5 files
+  # in the current WIP of the application.
+  dir.path = "../build/bioatlas"
+}
 
 #' list files
 #' @serializer unboxedJSON
