@@ -8,7 +8,7 @@ services:
     env_file: .env
     working_dir: /app
     volumes:
-      - ./bioatlas:/app
+      - ./bioatlas:/app/build/bioatlas
     ports:
       - "8000:8000"
     networks:
@@ -24,7 +24,6 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./bioatlas:/bioatlas
       - ./nginx-conf:/etc/nginx/conf.d
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/log/nginx:/var/log/nginx
@@ -39,11 +38,10 @@ services:
     volumes:
       - /var/log/letsencrypt:/var/log/letsencrypt
       - /etc/letsencrypt:/etc/letsencrypt
-      - ./bioatlas:/bioatlas
 
     networks:
       - app-network
-    command: certonly --dry-run --webroot --email layik.hama@gmail.com --agree-tos --no-eff-email -w ./bioatlas -d bioatlas.org -d www.bioatlas.org
+    command: certonly --dry-run --webroot --email layik.hama@gmail.com --agree-tos --no-eff-email -d bioatlas.org -d www.bioatlas.org
 
 # volumes:
 
