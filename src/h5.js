@@ -9,6 +9,7 @@ const h5GetData = (url, file, callback) => {
   fetch(url)
     .then(function (response) {
       // console.log(response)
+      if(!response.ok) return null
       return response.arrayBuffer()
     })
     .then(function (buffer) {
@@ -31,6 +32,9 @@ const h5GetData = (url, file, callback) => {
       // let d = f.get('group/dataset');
       // let v = d.value;
       // let a = d.attrs;
+    })
+    .catch(error => {
+      console.log(error)
     });
 }
 /**

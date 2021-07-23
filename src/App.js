@@ -38,13 +38,17 @@ function App() {
       date: e.slice(4)[0]
     }))
   )
-  // console.log(geojson.features);
+  // console.log(geojson.features.slice(0,10));
+  if(!xyz || !xyz.length) return(
+    <div className="App">
+      <div className="App-header"> No data to visualize </div>
+    </div>
+  )
   return (
     <> 
-    {xyz && xyz.length
-      && <Eatlas
+    <Eatlas
       layerName="pointcloud"
-      data={geojson} column="value" />}
+      data={geojson} column="value" />
     </>
   );
 
@@ -71,7 +75,7 @@ function App() {
         // values, rlon, rlat 
         values: dbz, rlon: where.lon, rlat: where.lat,
         elangle: obj.elangles[0], 
-        date: isDate(dd) && dd.toLocaleString()
+        date: isDate(dd) && dd.toISOString()
       });
       // const gj = turf.featureCollection(
       //   radarLonLats.map((e, i) => turf.point(e, { value: dbz[i] }))

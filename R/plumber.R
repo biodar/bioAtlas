@@ -20,11 +20,21 @@ cors = function(res) {
 
 #' .h5 directory
 dir.path = Sys.getenv("H5FILES_PATH")
+h5.public = "../build/bioatlas"
+print(dir.path)
 if(!dir.exists(dir.path)){
   # try the local path
   # this is where we can dump & read .h5 files
   # in the current WIP of the application.
-  dir.path = "../build/bioatlas"
+  dir.path = h5.public
+} else {
+  # good for dev work
+  # TODO: remove/consolidate for release/production
+  ##' To check if files (incl. directories) are symbolic links:
+  is.symlink <- function(paths) isTRUE(nzchar(Sys.readlink(paths), keepNA=TRUE))
+  if(!is.symlink(h5.public)) {
+    file.symlink(dir.path, h5.public)
+  }
 }
 
 #' list files
