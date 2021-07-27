@@ -1,4 +1,5 @@
-packages = c("curl", "data.table", "jsonlite")
+packages = c("curl", "data.table", "jsonlite", 
+             "magrittr", "rhdf5", "bioRad")
 lapply(packages, library, character.only = TRUE)
 
 # if(is.null(curl::nslookup("r-project.org", error = FALSE))) {
@@ -71,3 +72,134 @@ get_scan_timelines = function(){
 #'
 #' @assets ../build /
 list()
+
+agg.dir = "../../bioAtlas/data"
+
+init_data = function(hhmm = "1300", lp = FALSE) {
+  slot = file.path("sp", hhmm)
+  if(lp) {
+    slot = file.path("lp", hhmm)
+  }
+  stopifnot(grepl("^sp|^lp", slot))
+  datagroup = file.path(slot, "dataset1/data1/data")
+  eanglegroup = file.path(slot, "dataset1/where")
+  p = file.path(agg.dir, "20180101_polar_pl_radar21_aggregate.h5")
+  stopifnot(file.exists(p))
+  
+  d = h5read(p, datagroup)
+  a = h5readAttributes(p, eanglegroup)$elangle
+  
+  ranges = dim(d)[1]; cols = dim(d)[2]
+  
+  dt = data.frame(value=as.vector(d), 
+                  theta=rep(c(1:cols), ranges), 
+                  radius=rep(c(1:ranges)*600,each=cols), 
+                  a=rep(a, each=(cols*ranges)))
+  dt = as.data.table(dt)
+  
+  rl = h5readAttributes(p, paste0(slot, "/where"))
+  
+  # get x,y,z
+  dt$x = dt$radius*sin(90-dt$a)*cos(dt$theta)
+  dt$y = dt$radius*sin(90-dt$a)*sin(dt$theta)
+  dt$z = (beam_height(dt$radius, dt$a, k = 4/3, lat = rl$lat, re = 6378, rp = 6357) + rl$height) %>% round
+  
+  # continue Chris's comments/code
+  # Now calculate the change in latitude and longitude for each of those points
+  # https://stackoverflow.com/questions/2187657/calculate-second-point-knowing-the-starting-point-and-distance
+  delta_lon = dt$x/(111320*cos(rl$lat))  # dx, dy in meters
+  delta_lat = dt$y/110540                       # result in degrees long/lat
+  # Calculate the lat and long of each point in the radar scan
+  dt$lat  = rl$lat + delta_lat
+  dt$long = rl$lon + delta_lon
+  
+  # get gain & offset
+  go = h5readAttributes(p, file.path(slot, "dataset1/data1/what"))
+  
+  dt$gain = go$gain
+  dt$offset = go$offset
+  
+  # calc Z/dbZ
+  dt$value = (dt$value * dt$gain) + dt$offset
+  
+  dt$x = NULL
+  dt$y = NULL
+  rm(delta_lon, delta_lat, go)
+  print(skimr::skim(dt))
+  dt
+}
+dt = init_data()
+
+#' Read the aggregate and serve a time slot's dbzh?
+#' @serializer unboxedJSON
+#' @get /api/aggregate/hhmm
+#' @get /api/aggregate/hhmm/lp
+#' @get /api/aggregate
+get_aggregate = function(res, hhmm = "0000", lp = FALSE) {
+  slot = file.path("sp", hhmm)
+  if(lp) {
+    slot = file.path("lp", hhmm)
+  }
+  p = file.path(agg.dir, "20180101_polar_pl_radar21_aggregate.h5")
+  if(!file.exists(p)) {
+    print("file not found")
+    res$status = 500
+    return(list(error = "An error occurred. Please contact your administrator."))
+  }
+  if(!grepl("^sp|^lp", slot)) {
+    print("Slot does not start with sp|lp")
+    res$status = 500
+    return(list(error = "An error occurred. Please contact your administrator."))
+  }
+  # add in the dates (time really)
+  # hard-coded
+  l = gregexpr("_polar_pl_radar21", basename(p))
+  date = substr(basename(p), 1, l[[1]][1] - 1)
+  date = as.POSIXct(paste0(date, hhmm), format = "%Y%m%d%H%M")
+  
+  # data from slot
+  datagroup = file.path(slot, "dataset1/data1/data")
+  eanglegroup = file.path(slot, "dataset1/where")
+  
+  # update data
+  dt$value = as.vector(h5read(p, datagroup))
+  dt$value = (dt$value * dt$gain) + dt$offset
+  
+  # update z
+  # these should be fast
+  a = h5readAttributes(p, eanglegroup)$elangle
+  rl = h5readAttributes(p, paste0(slot, "/where"))
+  dt$z = (beam_height(dt$radius, a, k = 4/3, lat = rl$lat, re = 6378, rp = 6357) + rl$height) %>% round
+  
+  # clean up
+  dt = dt[dt$value != 0]
+  
+  print(skimr::skim(dt))
+  
+  list(
+    data=dt$value, a=a, z=dt$z, time=date
+  )
+}
+
+#' Return the lon lats from the initial dt
+#' @serializer unboxedJSON
+#' @get /api/lonlats
+get_lonlats = function() {
+  list(
+    lons=dt$long,
+    lats=dt$lat
+  )
+}
+
+#' Return only the radar's lon lat
+#' @serializer unboxedJSON
+#' @get /api/radarwhere
+get_lonlats = function() {
+  p = file.path(agg.dir, "20180101_polar_pl_radar21_aggregate.h5")
+  if(!file.exists(p)) {
+    print("file not found")
+    res$status = 500
+    return(list(error = "An error occurred. Please contact your administrator."))
+  }
+  h5readAttributes(p, "sp/0000/where")
+}
