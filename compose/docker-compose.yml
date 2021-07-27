@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  bioatlas:
+    image: bioatlas
+    container_name: bioatlas
+    restart: unless-stopped
+    env_file: .env
+    working_dir: /app
+    volumes:
+      - ./bioatlas:/app/build/bioatlas
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+
+  webserver:
+    image: nginx:1.15.12-alpine
+    container_name: webserver
+    depends_on: 
+      - bioatlas
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx-conf:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/log/nginx:/var/log/nginx
+    networks:
+      - app-network
+
+  certbot:
+    depends_on:
+      - webserver
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - /var/log/letsencrypt:/var/log/letsencrypt
+      - /etc/letsencrypt:/etc/letsencrypt
+
+    networks:
+      - app-network
+    command: certonly --dry-run --webroot --email layik.hama@gmail.com --agree-tos --no-eff-email -d bioatlas.org -d www.bioatlas.org
+
+# volumes:
+
+networks:
+  app-network:
+    driver: bridge
