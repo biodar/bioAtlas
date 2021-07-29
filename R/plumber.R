@@ -73,9 +73,24 @@ get_scan_timelines = function(){
 #' @assets ../build /
 list()
 
-agg.dir = "../../bioAtlas/data"
+agg.dir = "../bioAtlas/data"
 
-init_data = function(hhmm = "1300", lp = FALSE) {
+#' Get intervals for sp/lp
+#' 
+get_intervals = function(lp = FALSE) {
+  hh = 0:23; mm = 0:5 * 10
+  if(lp) mm = 0:11 * 5
+  unlist(lapply(hh, function(x) lapply(mm, function(y) {
+    paste0(
+      sprintf("%02d", x), 
+      sprintf("%02d", y)
+    )
+  })))
+}
+
+intervals = get_intervals()
+
+init_data = function(hhmm = intervals[1], lp = FALSE) {
   slot = file.path("sp", hhmm)
   if(lp) {
     slot = file.path("lp", hhmm)
@@ -126,8 +141,10 @@ init_data = function(hhmm = "1300", lp = FALSE) {
   dt$y = NULL
   rm(delta_lon, delta_lat, go)
   print(skimr::skim(dt))
+  h5closeAll()
   dt
 }
+
 dt = init_data()
 
 #' Read the aggregate and serve a time slot's dbzh?
@@ -135,7 +152,7 @@ dt = init_data()
 #' @get /api/aggregate/hhmm
 #' @get /api/aggregate/hhmm/lp
 #' @get /api/aggregate
-get_aggregate = function(res, hhmm = "0000", lp = FALSE) {
+get_aggregate = function(res, hhmm = intervals[1], lp = FALSE) {
   slot = file.path("sp", hhmm)
   if(lp) {
     slot = file.path("lp", hhmm)
@@ -174,12 +191,14 @@ get_aggregate = function(res, hhmm = "0000", lp = FALSE) {
   # clean up
   dt = dt[dt$value != 0]
   
-  print(skimr::skim(dt))
-  
+  # print(skimr::skim(dt))
+  h5closeAll()
   list(
     data=dt$value, a=a, z=dt$z, time=date
   )
 }
+
+dt.all = lapply(get_intervals()[1:10], function(x) get_aggregate(hhmm = x))
 
 #' Return the lon lats from the initial dt
 #' @serializer unboxedJSON
@@ -203,3 +222,5 @@ get_lonlats = function() {
   }
   h5readAttributes(p, "sp/0000/where")
 }
+
+h5closeAll()
