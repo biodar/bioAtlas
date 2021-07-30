@@ -22,6 +22,13 @@ test_that("get_intervals is correct", {
 })
 #> Test passed 🎊
 
+test_that("get_aggregate returns data", {
+  ints = get_intervals()
+  agg1 = get_aggregate(hhmm = ints[sample(length(ints), 1)])
+  expect_true(length(agg1) == 4)
+  expect_true(length(agg1[[1]]) > 1e4)
+})
+
 test_that("get_aggregate gets different reflectivity", {
   ints = get_intervals()
   agg1 = get_aggregate(hhmm = ints[1])

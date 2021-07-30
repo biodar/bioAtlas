@@ -74,6 +74,7 @@ get_scan_timelines = function(){
 list()
 
 agg.dir = "../bioAtlas/data"
+agg.file = "20180101_polar_pl_radar21_aggregate.h5"
 
 #' Get intervals for sp/lp
 #' 
@@ -98,7 +99,7 @@ init_data = function(hhmm = intervals[1], lp = FALSE) {
   stopifnot(grepl("^sp|^lp", slot))
   datagroup = file.path(slot, "dataset1/data1/data")
   eanglegroup = file.path(slot, "dataset1/where")
-  p = file.path(agg.dir, "20180101_polar_pl_radar21_aggregate.h5")
+  p = file.path(agg.dir, agg.file)
   stopifnot(file.exists(p))
   
   d = h5read(p, datagroup)
@@ -157,7 +158,7 @@ get_aggregate = function(res, hhmm = intervals[1], lp = FALSE) {
   if(lp) {
     slot = file.path("lp", hhmm)
   }
-  p = file.path(agg.dir, "20180101_polar_pl_radar21_aggregate.h5")
+  p = file.path(agg.dir, agg.file)
   if(!file.exists(p)) {
     print("file not found")
     res$status = 500
@@ -214,7 +215,7 @@ get_lonlats = function() {
 #' @serializer unboxedJSON
 #' @get /api/radarwhere
 get_lonlats = function() {
-  p = file.path(agg.dir, "20180101_polar_pl_radar21_aggregate.h5")
+  p = file.path(agg.dir, agg.file)
   if(!file.exists(p)) {
     print("file not found")
     res$status = 500
