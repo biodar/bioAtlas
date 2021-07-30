@@ -1,5 +1,5 @@
 library(testthat)
-source("R/plumber.R")
+api.file = "R/plumber.R"
 
 # test_that("1 + 1 = 2", {
 #   expect_equal(1 + 1, 2)
@@ -47,3 +47,18 @@ test_that("get_aggregate gets different reflectivity", {
 # dt.all = lapply(get_intervals(), function(x) get_aggregate(hhmm = x))
 # pryr::object_size(dt.all)
 #> 158 MB
+
+#' plumb and test
+#' 
+apis = plumber::plumb("R/plumber.R")
+# length(apis$endpoints)
+
+test_that("first api path is /api/files", {
+  path = "/api/files"
+  expect_true(identical(path, apis$endpoints[[1]][[1]]$path))
+  # files to be returned
+  files = apis$endpoints[[1]][[1]]$exec(req = list(), res = 2)
+  # on local machines we have some 549 files returned
+  expect_true(length(files) > 500)
+})
+#> Test passed 🥇
