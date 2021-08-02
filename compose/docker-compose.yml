@@ -27,6 +27,7 @@ services:
       - ./nginx-conf:/etc/nginx/conf.d
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/log/nginx:/var/log/nginx
+      - ./bioatlas:/bioatlas
     networks:
       - app-network
 
