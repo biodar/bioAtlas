@@ -5,10 +5,10 @@ import './App.css';
 import { h5GetData, valuesToLonLatAlt } from './h5';
 import { isDate } from './JSUtils';
 
-const files = require('./files.json');
+// const files = require('./files.json');
 
 const turf = window.turf;
-// const files = [
+const files = [
   // "202007170006_polar_pl_radar20b3_augzdr_lp.h5",
   // "202007170006_polar_pl_radar20b4_augzdr_lp.h5",
   // "202007170007_polar_pl_radar20b2_augzdr_lp.h5",
@@ -19,12 +19,12 @@ const turf = window.turf;
   // "202007170002_polar_pl_radar20b2_augzdr_lp.h5",
   // "202007170002_polar_pl_radar20b3_augzdr_lp.h5",
   // "202007170002_polar_pl_radar20b4_augzdr_lp.h5"
-  // "202007170002_polar_pl_radar20b2_augzdr_lp.h5"
-// ]
+  "202007170002_polar_pl_radar20b2_augzdr_lp.h5"
+]
 function App() {
   const [xyz, setXYZ] = useState([])
   useEffect(() => {
-    files.slice(0,5).map(e => processH5("http://localhost:8080/" + e, e));
+    files.map(e => processH5("https://raw.githubusercontent.com/biodar/bdformats/master/" + e, e));
   }, [])
 
   // console.log(xyz);

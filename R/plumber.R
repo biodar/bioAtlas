@@ -22,7 +22,7 @@ cors = function(res) {
 #' .h5 directory
 dir.path = Sys.getenv("H5FILES_PATH")
 h5.public = "../build/bioatlas"
-print(dir.path)
+
 if(!dir.exists(dir.path)){
   # try the local path
   # this is where we can dump & read .h5 files
@@ -37,6 +37,8 @@ if(!dir.exists(dir.path)){
     file.symlink(dir.path, h5.public)
   }
 }
+print(dir.path)
+print(list.files(dir.path))
 
 #' list files
 #' @serializer unboxedJSON
@@ -50,6 +52,7 @@ get_file_names = function(){
 }
 
 files = get_file_names()
+
 # get dates+times off the files
 # all from same radar?
 # length(grep("_polar_pl_radar20", files)) == length(files)
@@ -73,10 +76,19 @@ get_scan_timelines = function(){
 #' @assets ../build /
 list()
 
-agg.dir = "../bioAtlas/data"
+#' TODO: is there a rplumber way of serving binary files? Cannot see it:
+#' https://www.rplumber.io/articles/rendering-output.html
+#' For now, to get a .h5 file from `files` from the above `list()`,
+#' the internal server needs to be setup with the appropriate path.
+#' For instance to get `domain.com/path/file.h5`, then `path` needs to
+#' be setup using Nginx or similar proxy file server which is supercedes
+#' rplumber APIs here in this plumber.R file.
+
+agg.dir = "../data"
 agg.file = "20180101_polar_pl_radar21_aggregate.h5"
 
-#' Get intervals for sp/lp
+#' Get intervals for sp/lp which are strings of 24hrs of 0000, 0010 ... 2300
+#' either 10 or 5 min intervals
 #' 
 get_intervals = function(lp = FALSE) {
   hh = 0:23; mm = 0:5 * 10
@@ -91,6 +103,10 @@ get_intervals = function(lp = FALSE) {
 
 intervals = get_intervals()
 
+#' A helper function to create a current environment object (a dataframe).
+#' This object is used so that only the data/dbzh column is updated/served.
+#' The function uses the local `agg.dir` and `agg.file` to generate the
+#' path of the aggregate .h5 file.
 init_data = function(hhmm = intervals[1], lp = FALSE) {
   slot = file.path("sp", hhmm)
   if(lp) {
@@ -141,7 +157,6 @@ init_data = function(hhmm = intervals[1], lp = FALSE) {
   dt$x = NULL
   dt$y = NULL
   rm(delta_lon, delta_lat, go)
-  print(skimr::skim(dt))
   h5closeAll()
   dt
 }
@@ -199,7 +214,7 @@ get_aggregate = function(res, hhmm = intervals[1], lp = FALSE) {
   )
 }
 
-dt.all = lapply(get_intervals()[1:10], function(x) get_aggregate(hhmm = x))
+# dt.all = lapply(get_intervals()[1:10], function(x) get_aggregate(hhmm = x))
 
 #' Return the lon lats from the initial dt
 #' @serializer unboxedJSON
