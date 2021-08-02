@@ -1,5 +1,13 @@
 # bioAtlas 
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+
+## July 27th
+
+* Still serving single file from github for GH Pages
+* Wrapping up with aggregate .h5 file
+* Estimate the national data switching between Radars
+* Overall docs to then come back to.
+
 ## July 5th
 
 Meeting notes & 3D radar image. More later.

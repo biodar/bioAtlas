@@ -5370,10 +5370,10 @@ earcut@^2.0.6, earcut@^2.1.5, earcut@^2.2.2:
   resolved "https://registry.yarnpkg.com/earcut/-/earcut-2.2.2.tgz#41b0bc35f63e0fe80da7cddff28511e7e2e80d11"
   integrity sha512-eZoZPPJcUHnfRZ0PjLvx2qBordSiO8ofC3vt+qACLM95u+4DovnbYNpQtJh0DNsWj8RnxrQytD4WA8gj5cRIaQ==
 
-eatlas@^1.3.0-beta.0:
-  version "1.3.0-beta.0"
-  resolved "https://registry.yarnpkg.com/eatlas/-/eatlas-1.3.0-beta.0.tgz#b0bf95053ff1177e732bac76c4a4c1d71f6db7b7"
-  integrity sha512-JzzpIS1i1o7h7ZIYpmZaIldODkIZFLH1bSYp2QilW/6IziVN25l6owLMpGgrYVkQNPZwei1wwftmJVqV9lLN3g==
+eatlas@^1.3.0-beta.1:
+  version "1.3.0-beta.1"
+  resolved "https://registry.yarnpkg.com/eatlas/-/eatlas-1.3.0-beta.1.tgz#53557de4e08878121a27663657c69c6318d725c7"
+  integrity sha512-WHozTzQkGU4lLgNCiX4VzthO9iFjkGfgoL5NglLPLlOeSG9UNWBzAfwKeAP4vKZkUxW3Zh3IxC1AwOt2+DP2Fw==
   dependencies:
     "@turf/bbox" "^6.3.0"
     "@turf/bezier-spline" "^6.2.0"
