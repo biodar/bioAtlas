@@ -4,6 +4,7 @@ import Eatlas from 'eatlas';
 import './App.css';
 import { h5GetData, valuesToLonLatAlt } from './h5';
 import { isDate } from './JSUtils';
+import { InputSlider } from './utils';
 
 // const files = require('./files.json');
 
@@ -23,8 +24,20 @@ const files = [
 ]
 function App() {
   const [xyz, setXYZ] = useState([])
+  const [dates, setDates] = useState([])
+
   useEffect(() => {
     files.map(e => processH5("https://raw.githubusercontent.com/biodar/bdformats/master/" + e, e));
+    fetch('http://IP/api/timeline')
+      .then(res => {
+        if (res.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: ' +
+            res.status);
+          return;
+        }
+        return res.json()
+      })
+      .then(d => setDates(d))
   }, [])
 
   // console.log(xyz);
@@ -44,11 +57,23 @@ function App() {
       <div className="App-header"> No data to visualize </div>
     </div>
   )
+  console.log(dates);
   return (
     <> 
     <Eatlas
       layerName="pointcloud"
       data={geojson} column="value" />
+    {dates && dates.length && <div 
+      className="mapbox-legend mapboxgl-ctrl bottom-panel"
+      style={{
+        backgroundColor: '#242730',
+        color: 'white',
+        marginRight:60,
+        height: 140,
+        padding: 15
+        }}>
+        <InputSlider dates={dates}/>
+    </div>}
     </>
   );
 
