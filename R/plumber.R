@@ -37,8 +37,8 @@ if(!dir.exists(dir.path)){
     file.symlink(dir.path, h5.public)
   }
 }
-print(dir.path)
-print(list.files(dir.path))
+# print(dir.path)
+# print(list.files(dir.path))
 
 #' list files
 #' @serializer unboxedJSON
@@ -208,9 +208,10 @@ get_aggregate = function(res, hhmm = intervals[1], lp = FALSE) {
   dt = dt[dt$value != 0]
   
   # print(skimr::skim(dt))
+
   h5closeAll()
   list(
-    data=dt$value, a=a, z=dt$z, time=date
+    data=dt$value, a=a, z=dt$z, time=date, l=c(rl$lon, rl$lat)
   )
 }
 
@@ -229,7 +230,7 @@ get_lonlats = function() {
 #' Return only the radar's lon lat
 #' @serializer unboxedJSON
 #' @get /api/radarwhere
-get_lonlats = function() {
+get_radar_lonlat = function() {
   p = file.path(agg.dir, agg.file)
   if(!file.exists(p)) {
     print("file not found")
