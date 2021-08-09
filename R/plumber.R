@@ -165,10 +165,16 @@ dt = init_data()
 
 #' Read the aggregate and serve a time slot's dbzh?
 #' @serializer unboxedJSON
-#' @get /api/aggregate/hhmm
-#' @get /api/aggregate/hhmm/lp
+#' @get /api/aggregate/<hhmm>
+#' @get /api/aggregate/<hhmm>/<lp:logical>
 #' @get /api/aggregate
+#' @get /api/aggregate/
 get_aggregate = function(res, hhmm = intervals[1], lp = FALSE) {
+  if(! hhmm %in% intervals) {
+    print("interval not in intervals")
+    res$status = 500
+    return(list(error = "An error occurred. Please contact your administrator."))
+  }
   slot = file.path("sp", hhmm)
   if(lp) {
     slot = file.path("lp", hhmm)
