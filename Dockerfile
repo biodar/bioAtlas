@@ -24,7 +24,7 @@ RUN apt-get update \
 
 # RUN apt-get install -y r-cran-devtools r-cran-sf r-cran-plumber
 
-RUN R -e 'install.packages(c("curl", "plumber", "data.table", "jsonlite"), repos="http://cran.us.r-project.org")'
+RUN R -e 'install.packages(c("curl", "data.table", "jsonlite", "magrittr", "rhdf5", "bioRad"), repos="http://cran.us.r-project.org")'
 
 # add node/npm
 RUN apt-get -y install curl gnupg
