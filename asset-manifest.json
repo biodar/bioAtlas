@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/bioAtlas/static/css/main.7f904051.chunk.css",
+    "main.js": "/bioAtlas/static/js/main.a51b5135.chunk.js",
+    "main.js.map": "/bioAtlas/static/js/main.a51b5135.chunk.js.map",
+    "runtime-main.js": "/bioAtlas/static/js/runtime-main.2b2b07b8.js",
+    "runtime-main.js.map": "/bioAtlas/static/js/runtime-main.2b2b07b8.js.map",
+    "static/css/2.135a7cd2.chunk.css": "/bioAtlas/static/css/2.135a7cd2.chunk.css",
+    "static/js/2.c30e309a.chunk.js": "/bioAtlas/static/js/2.c30e309a.chunk.js",
+    "static/js/2.c30e309a.chunk.js.map": "/bioAtlas/static/js/2.c30e309a.chunk.js.map",
+    "static/js/3.bc262c8d.chunk.js": "/bioAtlas/static/js/3.bc262c8d.chunk.js",
+    "static/js/3.bc262c8d.chunk.js.map": "/bioAtlas/static/js/3.bc262c8d.chunk.js.map",
+    "index.html": "/bioAtlas/index.html",
+    "precache-manifest.d450c67b92df7b20ddc9088a7f6b00b5.js": "/bioAtlas/precache-manifest.d450c67b92df7b20ddc9088a7f6b00b5.js",
+    "service-worker.js": "/bioAtlas/service-worker.js",
+    "static/css/2.135a7cd2.chunk.css.map": "/bioAtlas/static/css/2.135a7cd2.chunk.css.map",
+    "static/css/main.7f904051.chunk.css.map": "/bioAtlas/static/css/main.7f904051.chunk.css.map",
+    "static/js/2.c30e309a.chunk.js.LICENSE.txt": "/bioAtlas/static/js/2.c30e309a.chunk.js.LICENSE.txt",
+    "static/media/location-icon-atlas.png": "/bioAtlas/static/media/location-icon-atlas.37932833.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.2b2b07b8.js",
+    "static/css/2.135a7cd2.chunk.css",
+    "static/js/2.c30e309a.chunk.js",
+    "static/css/main.7f904051.chunk.css",
+    "static/js/main.a51b5135.chunk.js"
+  ]
+}
