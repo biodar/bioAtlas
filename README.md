@@ -83,7 +83,7 @@ title
 Notes
 </th>
 <th style="text-align:left;">
-Duration
+Weeks
 </th>
 </tr>
 </thead>
@@ -144,12 +144,10 @@ TOTAL
 </tr>
 </tbody>
 </table>
-
--   Finish off any API, data source piping etc:
+<!-- * Finish off any API, data source piping etc:  -->
 
 There was little time to add a Gantt chart using
 [this](https://mermaid-js.github.io/mermaid-live-editor) great OSS tool.
-
 
 ## July 27th
 
@@ -157,7 +155,6 @@ There was little time to add a Gantt chart using
 -   Wrapping up with aggregate .h5 file
 -   Estimate the national data switching between Radars
 -   Overall docs to then come back to.
-
 
 ## July 5th
 

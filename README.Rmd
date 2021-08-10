@@ -49,17 +49,21 @@ knitr::include_graphics("screenshot.png")
 To estimate the work on a fully working and publically available `bioAtlas`, this is where we have ~15 radar data aggregates (in the current aggregate format) and we need to swithc between those radars to see their (bug maps), the estimate would be as follows being the minimum time required:
 
 ```{r future, echo=FALSE}
-df = data.frame(title="API/backend", Notes=NA, Duration=1)
-df = rbind(df, data.frame(title="Front/TGVE", Duration=3, Notes="Including minor/moderate changes to TGVE"))
-df = rbind(df, data.frame(title="Deploy/Devops", Duration=1, Notes="Including CI setup?"))
-df = rbind(df, data.frame(title="Data Prep", Duration="?", Notes="etc.."))
-df = rbind(df, data.frame(title="TOTAL", Duration="> 5", Notes=""))
-kableExtra::kable(df)
+library(kableExtra)
+df = data.frame(title="API/backend", Notes=NA, Weeks=1)
+df = rbind(df, data.frame(title="Front/TGVE", Weeks=3, Notes="Including minor/moderate changes to TGVE"))
+df = rbind(df, data.frame(title="Deploy/Devops", Weeks=1, Notes="Including CI setup?"))
+df = rbind(df, data.frame(title="Data Prep", Weeks="?", Notes="etc.."))
+df = rbind(df, data.frame(title="TOTAL", Weeks="> 5", Notes=""))
+kable(df) 
+# %>%
+  # kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 ```
 
-* Finish off any API, data source piping etc: 
+<!-- * Finish off any API, data source piping etc:  -->
 
 There was little time to add a Gantt chart using [this](https://mermaid-js.github.io/mermaid-live-editor) great OSS tool.
+
 ## July 27th
 
 * Still serving single file from github for GH Pages
