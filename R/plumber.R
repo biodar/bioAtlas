@@ -86,7 +86,8 @@ list()
 
 agg.dir = "../data"
 agg.file = "20180101_polar_pl_radar21_aggregate.h5"
-
+d.min = 0.25
+d.max = 2L
 #' Get intervals for sp/lp which are strings of 24hrs of 0000, 0010 ... 2300
 #' either 10 or 5 min intervals
 #' 
@@ -212,6 +213,8 @@ get_aggregate = function(res, hhmm = intervals[1], lp = FALSE) {
   
   # clean up
   dt = dt[dt$value != 0]
+  # TODO: filter dbzh
+  dt = dt[dt$value <= d.max & dt$value >= d.min]
   
   # print(skimr::skim(dt))
 
@@ -228,8 +231,10 @@ get_aggregate = function(res, hhmm = intervals[1], lp = FALSE) {
 #' @get /api/lonlats
 get_lonlats = function() {
   list(
-    lons=dt$long,
-    lats=dt$lat
+    lons=dt[dt$value != 0 & dt$value <= d.max 
+            & dt$value >= d.min]$long,
+    lats=dt[dt$value != 0 & dt$value <= d.max 
+            & dt$value >= d.min]$lat
   )
 }
 

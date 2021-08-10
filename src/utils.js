@@ -68,14 +68,15 @@ const InputSlider = (props) => {
   useInterval(() => {
     // Your custom logic here
     setIndex(i => {
+      let newIndex = i + 1
       if (i + 1 >= dates.length) {
         setDelay(null)
-        return i
+        newIndex = i
       }
-      return (i + 1)
+      typeof callback === 'function' &&
+        callback(dates[newIndex]);
+      return newIndex
     });
-    typeof callback === 'function' &&
-      callback(dates[value[0]]);
   }, delay);
 
   const { callback } = props;
@@ -96,41 +97,45 @@ const InputSlider = (props) => {
     }
   };
 
-  if(!dates || !dates.length) return null;
-  
+  if (!dates || !dates.length) return null;
+
   return (
     <div className={classes.root} style={{ textAlign: 'center' }}>
       {index}
       <Grid container spacing={2} alignItems="center">
-      <Grid item>
-        <i
-          style={{ maxHeight: 40, maxWidth: 40 }}
-          onClick={() => {
-            if (!delay) {
-              setDelay(amount)
-            } else {
-              setDelay(null) //stop
+        <Grid item>
+          <i
+            style={{ maxHeight: 40, maxWidth: 40 }}
+            onClick={() => {
+              if (!delay) {
+                setDelay(amount)
+              } else {
+                setDelay(null) //stop
+              }
+            }} >
+            {
+              !delay ?
+                <i style={{ fontSize: '2em' }} className="fa fa-play"></i>
+                : <i style={{ fontSize: '2em' }} className="fa fa-pause"></i>
             }
-          }} >
-          {
-            !delay ?
-              <i style={{ fontSize: '2em' }} className="fa fa-play"></i>
-              : <i style={{ fontSize: '2em' }} className="fa fa-pause"></i>
-          }
-        </i>
+          </i>
         </Grid>
         <Grid item xs>
-        <Slider
-          value={index}
-          min={0}
-          step={1}
-          max={dates.length - 1}
-          getAriaValueText={(i) => dates[i]}
-          valueLabelFormat={(i) => dates[i]}
-          onChange={(v, n) => setIndex(n)}
-          valueLabelDisplay="auto"
-          aria-labelledby="non-linear-slider"
-        />
+          <Slider
+            value={index}
+            min={0}
+            step={1}
+            max={dates.length - 1}
+            getAriaValueText={(i) => dates[i]}
+            valueLabelFormat={(i) => dates[i]}
+            onChange={(v, n) => {
+              setIndex(n);
+              typeof callback === 'function' 
+                && callback(dates[n]);
+            }}
+            valueLabelDisplay="auto"
+            aria-labelledby="non-linear-slider"
+          />
         </Grid>
       </Grid>
       <Typography id="input-slider" gutterBottom>
@@ -172,8 +177,49 @@ const InputSlider = (props) => {
   );
 }
 
+/**
+ * Thanks to https://stackoverflow.com/a/34695026/2332101
+ * @param {*} str 
+ */
+const isURL = (str) => {
+  var a = document.createElement('a');
+  a.href = str;
+  return (a.host && a.host !== window.location.host);
+}
+
+/**
+ * Simple function to fetch JSON from URL
+ * @param {*} url 
+ * @param {*} callback 
+ */
+const fetchJSON = (url, callback) => {
+  if (!url || !isURL(url)) {
+    if (typeof callback === 'function') {
+      callback(null, 'Please provide a valid URL.')
+    } else {
+      return null
+    }
+  }
+  if (typeof callback !== 'function') return null
+  fetch(url)
+    .then((response) => response.text())
+    .then((response) => {
+      try {
+        const json = JSON.parse(response);
+        callback(json)
+      } catch (error) {
+        callback(null, error)
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      callback(null, error)
+    });
+}
+
 export {
   convertRange,
   downloadJSON,
-  InputSlider
+  InputSlider,
+  fetchJSON
 }
