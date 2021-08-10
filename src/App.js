@@ -23,6 +23,7 @@ const files = [
 ]
 function App() {
   const [xyz, setXYZ] = useState([])
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
     files.map(e => processH5("https://raw.githubusercontent.com/biodar/bdformats/master/" + e, e));
   }, [])
@@ -41,7 +42,9 @@ function App() {
   // console.log(geojson.features.slice(0,10));
   if(!xyz || !xyz.length) return(
     <div className="App">
-      <div className="App-header"> No data to visualize </div>
+      <div className="App-header"> {
+        loading ? "Loading..." : "No data"
+      } </div>
     </div>
   )
   return (
@@ -80,7 +83,7 @@ function App() {
       // const gj = turf.featureCollection(
       //   radarLonLats.map((e, i) => turf.point(e, { value: dbz[i] }))
       // );
-
+      setLoading(false)
       setXYZ(currXYZ => {
         return(radarLonLats.concat(currXYZ))
       })
