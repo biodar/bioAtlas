@@ -40,9 +40,9 @@ June 2021 - 27th July 2021. The body of work consisted of:
 
 Radar data is conventionally two dimentional graphs (heatmaps) and they
 can be seen on news broadcasts focused on meteorological data
-visualization. In contrast, bioAtlas and the team at University of Leeds
-focus on entomological data visualization, that is radar data which
-detects bugs.
+visualization (see (Dokter et al. 2019) for R based visualizations). In
+contrast, bioAtlas and the team at University of Leeds focus on
+entomological data visualization, that is radar data which detects bugs.
 
 The work has been carried out with a simple scenario in mind, being able
 to see how a bug cloud (Horde, Nest, Plague, Rabble, Swarm from a
@@ -188,6 +188,15 @@ pushed here too.
 # References
 
 <div id="refs" class="references csl-bib-body hanging-indent">
+
+<div id="ref-bioRad" class="csl-entry">
+
+Dokter, Adriaan M., Peter Desmet, Jurriaan H. Spaaks, Stijn Van Hoey,
+Lourens Veen, Liesbeth Verlinden, Cecilia Nilsson, et al. 2019. “bioRad:
+Biological Analysis and Visualization of Weather Radar Data.”
+*Ecography* 42: 852–60. <https://doi.org/10.1111/ecog.04028>.
+
+</div>
 
 <div id="ref-lawrence2012jasmin" class="csl-entry">
 

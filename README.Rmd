@@ -36,7 +36,7 @@ The majority of the work was done under the contract duration of 10th June 2021 
 
 ### Description
 
-Radar data is conventionally two dimentional graphs (heatmaps) and they can be seen on news broadcasts focused on meteorological data visualization. In contrast, bioAtlas and the team at University of Leeds focus on entomological data visualization, that is radar data which detects bugs. 
+Radar data is conventionally two dimentional graphs (heatmaps) and they can be seen on news broadcasts focused on meteorological data visualization (see [@bioRad] for R based visualizations). In contrast, bioAtlas and the team at University of Leeds focus on entomological data visualization, that is radar data which detects bugs. 
 
 The work has been carried out with a simple scenario in mind, being able to see how a bug cloud (Horde, Nest, Plague, Rabble, Swarm from a dictionary lookup) moves across an image created by visualizing each "voxel" in a 360 (azimuth) x 425 (range) radar. In this simple scenario we imaging a cloud of bugs being detected on a radar and they move within the radar range and thus we can visualize each point/voxel using a point within the 3D (2.5D) space visualized. See Figure 1 for what has been developed so far which shows nothing specific. The reflectivity of the radar has been super-simplified into four categories for illustration/colouring purposes only (please see `bdformats` repository for samples of real raw reflectivity data).
 
