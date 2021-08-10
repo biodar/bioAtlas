@@ -37,8 +37,8 @@ if(!dir.exists(dir.path)){
     file.symlink(dir.path, h5.public)
   }
 }
-print(dir.path)
-print(list.files(dir.path))
+# print(dir.path)
+# print(list.files(dir.path))
 
 #' list files
 #' @serializer unboxedJSON
@@ -86,7 +86,8 @@ list()
 
 agg.dir = "../data"
 agg.file = "20180101_polar_pl_radar21_aggregate.h5"
-
+d.min = 0.25
+d.max = 2L
 #' Get intervals for sp/lp which are strings of 24hrs of 0000, 0010 ... 2300
 #' either 10 or 5 min intervals
 #' 
@@ -165,10 +166,16 @@ dt = init_data()
 
 #' Read the aggregate and serve a time slot's dbzh?
 #' @serializer unboxedJSON
-#' @get /api/aggregate/hhmm
-#' @get /api/aggregate/hhmm/lp
+#' @get /api/aggregate/<hhmm>
+#' @get /api/aggregate/<hhmm>/<lp:logical>
 #' @get /api/aggregate
+#' @get /api/aggregate/
 get_aggregate = function(res, hhmm = intervals[1], lp = FALSE) {
+  if(! hhmm %in% intervals) {
+    print("interval not in intervals")
+    res$status = 500
+    return(list(error = "An error occurred. Please contact your administrator."))
+  }
   slot = file.path("sp", hhmm)
   if(lp) {
     slot = file.path("lp", hhmm)
@@ -206,11 +213,14 @@ get_aggregate = function(res, hhmm = intervals[1], lp = FALSE) {
   
   # clean up
   dt = dt[dt$value != 0]
+  # TODO: filter dbzh
+  dt = dt[dt$value <= d.max & dt$value >= d.min]
   
   # print(skimr::skim(dt))
+
   h5closeAll()
   list(
-    data=dt$value, a=a, z=dt$z, time=date
+    data=dt$value, a=a, z=dt$z, time=date, l=c(rl$lon, rl$lat)
   )
 }
 
@@ -221,15 +231,17 @@ get_aggregate = function(res, hhmm = intervals[1], lp = FALSE) {
 #' @get /api/lonlats
 get_lonlats = function() {
   list(
-    lons=dt$long,
-    lats=dt$lat
+    lons=dt[dt$value != 0 & dt$value <= d.max 
+            & dt$value >= d.min]$long,
+    lats=dt[dt$value != 0 & dt$value <= d.max 
+            & dt$value >= d.min]$lat
   )
 }
 
 #' Return only the radar's lon lat
 #' @serializer unboxedJSON
 #' @get /api/radarwhere
-get_lonlats = function() {
+get_radar_lonlat = function() {
   p = file.path(agg.dir, agg.file)
   if(!file.exists(p)) {
     print("file not found")
