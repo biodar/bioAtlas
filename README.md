@@ -149,12 +149,15 @@ TOTAL
 
 There was little time to add a Gantt chart using
 [this](https://mermaid-js.github.io/mermaid-live-editor) great OSS tool.
-\#\# July 27th
+
+
+## July 27th
 
 -   Still serving single file from github for GH Pages
 -   Wrapping up with aggregate .h5 file
 -   Estimate the national data switching between Radars
 -   Overall docs to then come back to.
+
 
 ## July 5th
 
